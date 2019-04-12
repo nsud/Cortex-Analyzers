@@ -64,26 +64,34 @@ class HashddAnalyzer(Analyzer):
         if response['result'] == 'SUCCESS':
 
             if self.service == "status":
+
                 self.report({
                     'known_level': response[hash]['known_level']
                 })
+
             elif self.service == "detail":
-                self.report({
-                    'known_level': response[hash]['summary']['hashdd_known_level'],
-                    'file_name': response[hash]['summary']['hashdd_file_name'],
-                    'file_absolute_path': response[hash]['summary']['hashdd_file_absolute_path'],
-                    'size': response[hash]['summary']['hashdd_size'],
-                    'product_manufacturer': response[hash]['summary']['hashdd_product_manufacturer'],
-                    'product_name': response[hash]['summary']['hashdd_product_name'],
-                    'product_version': response[hash]['summary']['hashdd_product_version'],
-                    'architecture': response[hash]['summary']['hashdd_architecture'],
-                    'md5': response[hash]['summary']['hashdd_md5'],
-                    'sha1': response[hash]['summary']['hashdd_sha1'],
-                    'sha256': response[hash]['summary']['hashdd_sha256'],
-                    'ssdeep': response[hash]['summary']['hashdd_ssdeep']
-                })
-        else:
-            self.error('{}'.format(response['result']))
+
+                if response[hash]['result'] != 'NOT_FOUND':
+
+                    self.report({
+                        'known_level': response[hash]['summary']['hashdd_known_level'],
+                        'file_name': response[hash]['summary']['hashdd_file_name'],
+                        'file_absolute_path': response[hash]['summary']['hashdd_file_absolute_path'],
+                        'size': response[hash]['summary']['hashdd_size'],
+                        'product_manufacturer': response[hash]['summary']['hashdd_product_manufacturer'],
+                        'product_name': response[hash]['summary']['hashdd_product_name'],
+                        'product_version': response[hash]['summary']['hashdd_product_version'],
+                        'architecture': response[hash]['summary']['hashdd_architecture'],
+                        'md5': response[hash]['summary']['hashdd_md5'],
+                        'sha1': response[hash]['summary']['hashdd_sha1'],
+                        'sha256': response[hash]['summary']['hashdd_sha256'],
+                        'ssdeep': response[hash]['summary']['hashdd_ssdeep']
+                    })
+                else:
+                    self.report({'result': response[hash]['result']})
+
+            else:
+                self.error('{}'.format(response['result']))
 
 
 if __name__ == '__main__':
